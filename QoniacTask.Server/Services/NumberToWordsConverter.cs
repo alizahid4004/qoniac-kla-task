@@ -16,28 +16,54 @@
         private static readonly ValueDescription Million = new(1_000_000, "million");
         private static readonly ValueDescription Billion = new(1_000_000_000, "billion");
 
-        //todo: support decimals
-        public static string Convert(long number, NumberToWordsOptions? options = null)
+        public static string Convert(decimal number, NumberToWordsOptions? options = null)
         {
             options ??= Default;
 
+            var numberParts = number.ToString().Split(options.DecimalSymbol);
+            var integer = long.Parse(numberParts[0]);
+
+            var integerDescription = ConvertInternal(integer, false, options);
+
+            var hasDecimal = numberParts.Length > 1;
+
+            if (hasDecimal)
+            {
+                var @decimal = long.Parse(numberParts[1]);
+                var decimalDescription = ConvertInternal(@decimal, true, options);
+
+                var integerDecimalSeparator = string.IsNullOrWhiteSpace(options.IntegerDecimalSeparationText) ?
+                    " " : $" {options.IntegerDecimalSeparationText.Trim()} ";
+
+                return $"{integerDescription}{integerDecimalSeparator}{decimalDescription}";
+            }
+
+            return integerDescription;
+        }
+
+        private static string ConvertInternal(
+            long number, bool isDecimal, NumberToWordsOptions options)
+        {
+            var unit = isDecimal ? options.DecimalUnit : options.IntegerUnit;
+            var unitForOne = isDecimal ? options.DecimalUnitForOne : options.IntegerUnitForOne;
+
             if (number == 0)
             {
-                return string.IsNullOrWhiteSpace(options.IntegerUnit) ?
-                    Units[number] : $"{Units[number]} {options.IntegerUnit}";
+                return string.IsNullOrWhiteSpace(unit) ?
+                    Units[number] : $"{Units[number]} {unit}";
             }
 
             if (number == 1)
             {
-                return string.IsNullOrWhiteSpace(options.IntegerUnitForOne) ?
-                    Units[number] : $"{Units[number]} {options.IntegerUnitForOne}";
+                return string.IsNullOrWhiteSpace(unitForOne) ?
+                    Units[number] : $"{Units[number]} {unitForOne}";
             }
 
             //NOTE: Not relevant for this task, but negative numbers are also supported :)
             if (number < 0)
             {
                 return string.IsNullOrWhiteSpace(options.NegativeText) ?
-                    Convert(-number, options) : $"{options.NegativeText} {Convert(-number, options)}";
+                    ConvertInternal(-number, isDecimal, options) : $"{options.NegativeText} {ConvertInternal(-number, isDecimal, options)}";
             }
 
             var parts = new List<string>(20);
@@ -48,9 +74,9 @@
 
             AppendPartsUnderThousand(parts, number, options);
 
-            if (!string.IsNullOrWhiteSpace(options.IntegerUnit))
+            if (!string.IsNullOrWhiteSpace(unit))
             {
-                parts.Add(options.IntegerUnit);
+                parts.Add(unit);
             }
 
             return string.Join(' ', parts);
@@ -72,7 +98,6 @@
             parts.Add(word);
         }
 
-        //todo: consider moving the separating word to a settings object (like system.text.json)
         private static void AppendPartsUnderThousand(
             List<string> parts, long number,
             NumberToWordsOptions options)

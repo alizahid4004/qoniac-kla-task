@@ -4,9 +4,10 @@
     {
         private string _negativeText = "negative";
         private string _integerUnit = string.Empty;
-        private string _fractionUnit = string.Empty;
+        private string _decimalUnit = string.Empty;
         private string _integerUnitForOne = string.Empty;
-        private string _fractionUnitForOne = string.Empty;
+        private string _decimalUnitForOne = string.Empty;
+        private string _integerDecimalSeparationText = "and";
 
         /// <summary>
         /// What word should be used to describe negative number.
@@ -44,15 +45,15 @@
         /// What unit, if any, is used for the decimal (mantissa) part of the number
         /// </summary>
         /// <remarks>Default: no value is used</remarks>
-        public string FractionUnit
+        public string DecimalUnit
         {
             get
             {
-                return _fractionUnit ?? string.Empty;
+                return _decimalUnit ?? string.Empty;
             }
             set
             {
-                _fractionUnit = value;
+                _decimalUnit = value;
             }
         }
 
@@ -73,20 +74,42 @@
         }
 
         /// <summary>
-        /// What unit, if any, is used for the fraction part of the number when it's 1 (unit/unity).
+        /// What unit, if any, is used for the decimal (mantissa) part of the number when it's 1 (unit/unity).
         /// </summary>
         /// <remarks>Default: no value is used</remarks>
-        public string FractionUnitForOne
+        public string DecimalUnitForOne
         {
             get
             {
-                return _fractionUnitForOne ??= string.Empty;
+                return _decimalUnitForOne ??= string.Empty;
             }
             set
             {
-                _fractionUnitForOne = value;
+                _decimalUnitForOne = value;
             }
         }
+
+        /// <summary>
+        /// Text that separates the integration description and the decimal description
+        /// </summary>
+        /// <remarks>Default: "and"</remarks>
+        public string IntegerDecimalSeparationText
+        {
+            get
+            {
+                return _integerDecimalSeparationText ??= string.Empty;
+            }
+            set
+            {
+                _integerDecimalSeparationText = value;
+            }
+        }
+
+        /// <summary>
+        /// Symbol that separates the integer and decimal part of a number such as a dot or a comma.
+        /// </summary>
+        /// <remarks>Default: ,</remarks>
+        public char DecimalSymbol { get; set; } = ',';
 
         /// <summary>
         /// Whether numbers from 21 to 99 should have a hyphen between them.
