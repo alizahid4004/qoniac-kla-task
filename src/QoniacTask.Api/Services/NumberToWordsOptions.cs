@@ -106,12 +106,6 @@
         }
 
         /// <summary>
-        /// Symbol that separates the integer and decimal part of a number such as a dot or a comma.
-        /// </summary>
-        /// <remarks>Default: ,</remarks>
-        public char DecimalSymbol { get; set; } = ',';
-
-        /// <summary>
         /// Whether numbers from 21 to 99 should have a hyphen between them.
         /// </summary>
         /// <example>When true, 21 will be converted to "twenty-two".</example>

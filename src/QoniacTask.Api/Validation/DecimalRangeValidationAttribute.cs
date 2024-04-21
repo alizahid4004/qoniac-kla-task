@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace QoniacTask.Api.Validation
 {
@@ -47,7 +48,7 @@ namespace QoniacTask.Api.Validation
                 return false;
             }
 
-            var numberParts = number.ToString().Split('.');
+            var numberParts = number.ToString(CultureInfo.InvariantCulture).Split('.');
             var integer = long.Parse(numberParts[0]);
 
             if (integer < IntegerMinimum || integer > IntegerMaximum)

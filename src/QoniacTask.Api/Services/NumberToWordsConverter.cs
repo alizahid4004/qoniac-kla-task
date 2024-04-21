@@ -1,4 +1,6 @@
-﻿namespace QoniacTask.Server.Services
+﻿using System.Globalization;
+
+namespace QoniacTask.Server.Services
 {
     internal static class NumberToWordsConverter
     {
@@ -20,7 +22,9 @@
         {
             options ??= Default;
 
-            var numberParts = number.ToString().Split(options.DecimalSymbol);
+            //NOTE: I just want to break the number into integer and decimal part, so I want the
+            //ToString to always format the string in the same way regardless of the culture.
+            var numberParts = number.ToString(CultureInfo.InvariantCulture).Split('.');
             var integer = long.Parse(numberParts[0]);
 
             var integerDescription = ConvertInternal(integer, false, options);
