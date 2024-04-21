@@ -18,6 +18,7 @@ namespace QoniacTask.Server.Services
         private static readonly ValueDescription Million = new(1_000_000, "million");
         private static readonly ValueDescription Billion = new(1_000_000_000, "billion");
 
+        //This API design is inspired by System.Text.Json.JsonSerializer.Serialize :)
         public static string Convert(decimal number, NumberToWordsOptions? options = null)
         {
             options ??= Default;

@@ -10,7 +10,7 @@ namespace QoniacTask.Api.Validation
             long integerMinimum, long integerMaximum,
             ulong decimalMinimum, ulong decimalMaximum,
             bool decimalRequired = false)
-                : base($"The {0} field is a required decimal with the integer part in the range {integerMinimum} to {integerMaximum} and the decimal in the range {decimalMinimum} to {decimalMaximum}")
+                : base($"The {{0}} field is a required decimal with the integer part in the range {integerMinimum} to {integerMaximum} and the decimal in the range {decimalMinimum} to {decimalMaximum}")
         {
             if (integerMinimum >= integerMaximum)
             {
@@ -43,7 +43,7 @@ namespace QoniacTask.Api.Validation
                 return true;
             }
 
-            if (value is not double number)
+            if (value is not decimal number)
             {
                 return false;
             }
@@ -64,11 +64,14 @@ namespace QoniacTask.Api.Validation
                 return false;
             }
 
-            var @decimal = ulong.Parse(numberParts[1]);
-
-            if (@decimal < DecimalMinimum || @decimal > DecimalMaximum)
+            if (hasDecimal)
             {
-                return false;
+                var @decimal = ulong.Parse(numberParts[1]);
+
+                if (@decimal < DecimalMinimum || @decimal > DecimalMaximum)
+                {
+                    return false;
+                }
             }
 
             return true;
