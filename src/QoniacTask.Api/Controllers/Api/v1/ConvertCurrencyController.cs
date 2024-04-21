@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QoniacTask.Api.Models;
+using QoniacTask.Server.Services;
 
 namespace QoniacTask.Api.Controllers
 {
@@ -7,11 +8,23 @@ namespace QoniacTask.Api.Controllers
     [Route("api/v1/convert-currency")]
     public class ConvertCurrencyController : ControllerBase
     {
+        private static readonly NumberToWordsOptions Options = new()
+        {
+            IntegerUnit = "dollars",
+            IntegerUnitForOne = "dollar",
+            DecimalUnit = "cents",
+            DecimalUnitForOne = "cent"
+        };
+
         [HttpPost(Name = "ConvertCurrency")]
         public IActionResult ConvertCurrency(
             [FromBody] CurrencyConversionRequest request)
         {
-            return Ok(request);
+            //NOTE: I don't see the benefit of putting this behind an interface. It's testable as is
+            //and putting it behind an interface would be pretty easy if the need arises.
+            var description = NumberToWordsConverter.Convert(request.Amount, Options);
+            var response = new CurrencyConversionResponse(description);
+            return Ok(response);
         }
     }
 }
