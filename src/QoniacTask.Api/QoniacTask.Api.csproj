@@ -20,6 +20,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <!-- Show SPA publish files in project but don't publish them -->
   <ItemGroup>
     <Content Remove="$(SpaRoot)**" />
@@ -40,11 +46,13 @@
     </Exec>
     <Error Condition="'$(ErrorCode)' != '0'"
       Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
-    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Message Importance="high"
+      Text="Restoring dependencies using 'npm'. This may take several minutes..." />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
   </Target>
 
-  <Target Name="PublishRunWebBuild" AfterTargets="ComputeFilesToPublish" Condition="'$(SkipSpaPublish)' != 'true'">
+  <Target Name="PublishRunWebBuild" AfterTargets="ComputeFilesToPublish"
+    Condition="'$(SkipSpaPublish)' != 'true'">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
@@ -52,7 +60,8 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')"
+        Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>Always</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

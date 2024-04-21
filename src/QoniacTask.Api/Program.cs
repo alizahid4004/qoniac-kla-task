@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+
 namespace QoniacTask.Server
 {
     public static class Program
@@ -6,14 +9,35 @@ namespace QoniacTask.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddControllers()
+                .ConfigureApiBehaviorOptions(setupAction =>
+                {
+                    setupAction.InvalidModelStateResponseFactory = context =>
+                    {
+                        var problemDetailsFactory =
+                            context.HttpContext.RequestServices.GetRequiredService<ProblemDetailsFactory>();
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+                        var validationProblemDetails =
+                            problemDetailsFactory.CreateValidationProblemDetails(
+                                context.HttpContext, context.ModelState);
+
+                        validationProblemDetails.Type =
+                            "https://datatracker.ietf.org/doc/html/rfc9110#name-422-unprocessable-content";
+                        validationProblemDetails.Status = StatusCodes.Status422UnprocessableEntity;
+
+                        return new UnprocessableEntityObjectResult(validationProblemDetails)
+                        {
+                            ContentTypes = { "application/problem+json" }
+                        };
+                    };
+                });
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            AttachGlobalHanders(app.Logger);
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -29,12 +53,32 @@ namespace QoniacTask.Server
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");
 
             app.Run();
+
+            static void AttachGlobalHanders(ILogger logger)
+            {
+                AppDomain.CurrentDomain.UnhandledException += (sender, exArgs) =>
+                    logger.LogError(
+                        exArgs?.ExceptionObject is Exception ex ? ex : null,
+                        "'AppDomain.CurrentDomain.UnhandledException' Sender: {Sender}, Sender Type: {SenderType}, Is Runtime Terminating: {IsTerminating}",
+                        sender,
+                        sender?.GetType().FullName,
+                        exArgs is null ? "Unknown" : exArgs.IsTerminating
+                    );
+
+                TaskScheduler.UnobservedTaskException += (sender, exArgs) =>
+                    logger.LogError(
+                        exArgs?.Exception,
+                        "'TaskScheduler.UnobservedTaskException' Sender: {Sender}, Sender Type: {SenderType}, Observed: {Observed}",
+                        sender,
+                        sender?.GetType().FullName,
+                        exArgs is null ? "Unknown" : exArgs.Observed
+                    );
+            }
         }
     }
 }
