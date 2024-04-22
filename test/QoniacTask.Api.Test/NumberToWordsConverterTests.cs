@@ -22,5 +22,34 @@ namespace QoniacTask.Api.Test
 
             Assert.Equal(expectedResult, description);
         }
+
+        private static readonly NumberToWordsOptions Options = new()
+        {
+            IntegerUnit = "dollars",
+            IntegerUnitForOne = "dollar",
+            DecimalUnit = "cents",
+            DecimalUnitForOne = "cent",
+            AddAnd = false,
+            IntegerDecimalSeparationText = "and"
+        };
+
+        public static TheoryData<decimal, string> CurrencyConversionData =>
+        new()
+        {
+            { 0m, "zero dollars" },
+            { 1m, "one dollar" },
+            { 25.10m, "twenty-five dollars and ten cents" },
+            { 999_999_999.99m, "nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine dollars and ninety-nine cents" },
+        };
+
+        [Theory]
+        [MemberData(nameof(CurrencyConversionData))]
+        public void Convert_ShouldConvertToCurrencyDescription_WhenCurrencySettingsAreProvided(
+            decimal number, string expectedResult)
+        {
+            var description = NumberToWordsConverter.Convert(number, Options);
+
+            Assert.Equal(expectedResult, description);
+        }
     }
 }
