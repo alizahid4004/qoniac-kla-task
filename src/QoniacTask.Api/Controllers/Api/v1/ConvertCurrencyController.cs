@@ -13,7 +13,9 @@ namespace QoniacTask.Api.Controllers
             IntegerUnit = "dollars",
             IntegerUnitForOne = "dollar",
             DecimalUnit = "cents",
-            DecimalUnitForOne = "cent"
+            DecimalUnitForOne = "cent",
+            AddAnd = false,
+            IntegerDecimalSeparationText = "and"
         };
 
         [HttpPost(Name = "ConvertCurrency")]
