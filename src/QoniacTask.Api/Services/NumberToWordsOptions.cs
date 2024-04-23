@@ -12,7 +12,7 @@
         /// <summary>
         /// What word should be used to describe negative number.
         /// </summary>
-        /// <remarks>Default: "negative"</remarks>
+        /// <remarks><strong>Default: "negative"</strong></remarks>
         public string NegativeText
         {
             get
@@ -28,7 +28,7 @@
         /// <summary>
         /// What unit, if any, is used for the integer (characteristic) part of the number
         /// </summary>
-        /// <remarks>Default: no value is used</remarks>
+        /// <remarks><strong>Default: <em>no value is used</em></strong></remarks>
         public string IntegerUnit
         {
             get
@@ -44,7 +44,7 @@
         /// <summary>
         /// What unit, if any, is used for the decimal (mantissa) part of the number
         /// </summary>
-        /// <remarks>Default: no value is used</remarks>
+        /// <remarks><strong>Default: <em>no value is used</em></strong></remarks>
         public string DecimalUnit
         {
             get
@@ -60,7 +60,7 @@
         /// <summary>
         /// What unit, if any, is used for 1 (unit/unity).
         /// </summary>
-        /// <remarks>Default: no value is used</remarks>
+        /// <remarks><strong>Default: <em>no value is used</em></strong></remarks>
         public string IntegerUnitForOne
         {
             get
@@ -76,7 +76,7 @@
         /// <summary>
         /// What unit, if any, is used for the decimal (mantissa) part of the number when it's 1 (unit/unity).
         /// </summary>
-        /// <remarks>Default: no value is used</remarks>
+        /// <remarks><strong>Default: <em>no value is used</em></strong></remarks>
         public string DecimalUnitForOne
         {
             get
@@ -92,7 +92,7 @@
         /// <summary>
         /// Text that separates the integration description and the decimal description
         /// </summary>
-        /// <remarks>Default: "and"</remarks>
+        /// <remarks><strong>Default: "and"</strong></remarks>
         public string IntegerDecimalSeparationText
         {
             get
@@ -106,17 +106,19 @@
         }
 
         /// <summary>
-        /// Whether numbers from 21 to 99 should have a hyphen between them.
+        /// Whether the tens part of the description should have a hyphen between it.
         /// </summary>
-        /// <example>When true, 21 will be converted to "twenty-two".</example>
-        /// <remarks>Default: true</remarks>
+        /// <remarks>
+        /// Example: When true, 876543 will be converted to "eight hundred and <strong>seventy-six</strong> thousand five hundred and <strong>forty-three</strong>".<br/>
+        /// <strong>Default: true</strong>
+        /// </remarks>
         public bool HyphenateTens { get; set; } = true;
 
         /// <summary>
         /// Whether to add the word "and" before the last number.
         /// </summary>
         /// <example>When true, 4305 becomes "four thousand three hundred and five" otherwise it's "four thousand three hundred five"</example>
-        /// <remarks>Default: true</remarks>
+        /// <remarks><strong>Default: true</strong></remarks>
         public bool AddAnd { get; set; } = true;
 
         //NOTE: another property that can be added here is CultureInfo to support other languages and cultures
