@@ -8,10 +8,11 @@ module.exports = {
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
+    "plugins:prettier-plugin-tailwindcss",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react", "react-refresh", "@typescript-eslint"],
+  plugins: ["react", "react-refresh", "@typescript-eslint", "tailwindcss"],
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
