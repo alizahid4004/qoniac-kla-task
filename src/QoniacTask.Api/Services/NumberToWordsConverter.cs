@@ -73,7 +73,7 @@ namespace QoniacTask.Server.Services
 
             var parts = new List<string>(20);
 
-            AppendParts(parts, ref number, Billion.Value, Million.Text, options);
+            AppendParts(parts, ref number, Billion.Value, Billion.Text, options);
             AppendParts(parts, ref number, Million.Value, Million.Text, options);
             AppendParts(parts, ref number, Thousand.Value, Thousand.Text, options);
 
