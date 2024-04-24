@@ -7,4 +7,10 @@ namespace QoniacTask.Api.Models
         [Required]
         [DecimalRangeValidation(0, 999999999, 0, 99)]
         [Display(Name = "currency amount")] decimal Amount);
+
+    public record CurrencyParseAndConvertRequest(
+        [Required]
+        [MinLength(1)]
+        [Display(Name = "formatted currency amount")]
+        string Amount);
 }

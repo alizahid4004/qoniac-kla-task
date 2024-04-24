@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using QoniacTask.Api.Models;
+using System;
+using System.Globalization;
 
 namespace QoniacTask.Server.Services
 {
@@ -6,7 +8,7 @@ namespace QoniacTask.Server.Services
     {
         private static readonly NumberToWordsOptions Default = new();
 
-        private static readonly string[] Units =
+        private static readonly string[] UnitsAndTeens =
             ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
 
         private static readonly string[] Tens =
@@ -14,6 +16,7 @@ namespace QoniacTask.Server.Services
 
         //NOTE: add more of these to support higher number
         private static readonly ValueDescription Hundred = new(100, "hundred");
+
         private static readonly ValueDescription Thousand = new(1_000, "thousand");
         private static readonly ValueDescription Million = new(1_000_000, "million");
         private static readonly ValueDescription Billion = new(1_000_000_000, "billion");
@@ -46,6 +49,24 @@ namespace QoniacTask.Server.Services
             return integerDescription;
         }
 
+        public static string Convert(Currency currency, NumberToWordsOptions? options = null)
+        {
+            options ??= Default;
+            var integerDescription = ConvertInternal(currency.Whole, false, options);
+
+            if (currency.Change.HasValue)
+            {
+                var decimalDescription = ConvertInternal(currency.Change.Value, true, options);
+
+                var integerDecimalSeparator = string.IsNullOrWhiteSpace(options.IntegerDecimalSeparationText) ?
+                        " " : $" {options.IntegerDecimalSeparationText.Trim()} ";
+
+                return $"{integerDescription}{integerDecimalSeparator}{decimalDescription}";
+            }
+
+            return integerDescription;
+        }
+
         private static string ConvertInternal(
             long number, bool isDecimal, NumberToWordsOptions options)
         {
@@ -55,13 +76,13 @@ namespace QoniacTask.Server.Services
             if (number == 0)
             {
                 return string.IsNullOrWhiteSpace(unit) ?
-                    Units[number] : $"{Units[number]} {unit}";
+                    UnitsAndTeens[number] : $"{UnitsAndTeens[number]} {unit}";
             }
 
             if (number == 1)
             {
                 return string.IsNullOrWhiteSpace(unitForOne) ?
-                    Units[number] : $"{Units[number]} {unitForOne}";
+                    UnitsAndTeens[number] : $"{UnitsAndTeens[number]} {unitForOne}";
             }
 
             //NOTE: Not relevant for this task, but negative numbers are also supported :)
@@ -109,7 +130,7 @@ namespace QoniacTask.Server.Services
         {
             if (number >= 100)
             {
-                parts.Add(Units[number / 100]);
+                parts.Add(UnitsAndTeens[number / 100]);
                 number %= 100;
                 parts.Add(Hundred.Text);
             }
@@ -135,14 +156,14 @@ namespace QoniacTask.Server.Services
                 else
                 {
                     var tensText = options.HyphenateTens ?
-                        $"{tens}-{Units[units]}" : $"{tens} {Units[units]}";
+                        $"{tens}-{UnitsAndTeens[units]}" : $"{tens} {UnitsAndTeens[units]}";
 
                     parts.Add(tensText);
                 }
             }
             else
             {
-                parts.Add(Units[number]);
+                parts.Add(UnitsAndTeens[number]);
             }
         }
 
