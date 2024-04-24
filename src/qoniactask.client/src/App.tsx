@@ -14,7 +14,7 @@ const App = () => {
   const fixedDecimalLength = 2;
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [className, setClassName] = useState("border-green-500");
+  const [borderClassName, setClassName] = useState("ring-gray-300");
   const [value, setValue] = useState<string | number>(123.45);
   const [values, setValues] = useState<CurrencyInputOnChangeValues>();
 
@@ -27,26 +27,26 @@ const App = () => {
     console.log(_values);
 
     if (!_value) {
-      setClassName("border-red-500");
+      setClassName("ring-red-500");
       setValue("");
       return;
     }
 
     if (Number(_value) > max) {
       setErrorMessage(`Max: ${prefix}${max}`);
-      setClassName("border-red-500");
+      setClassName("ring-red-500");
       setValue(_value);
       return;
     }
 
     if (Number(_value) < min) {
       setErrorMessage(`Min: ${prefix}${max}`);
-      setClassName("border-red-500");
+      setClassName("ring-red-500");
       setValue(_value);
       return;
     }
 
-    setClassName("border-green-500");
+    setClassName("ring-green-500");
     setValue(_value);
     setValues(_values);
   };
@@ -57,7 +57,7 @@ const App = () => {
 >
   <div className="sm:mx-auto sm:w-full sm:max-w-sm">
     <h1
-      className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+      className="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900"
     >
       Currency Describer
     </h1>
@@ -74,15 +74,14 @@ const App = () => {
             Enter value to be described
           </label>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 relative">
           <CurrencyInput
             id="currency-input"
             name="currency-input"
-            className={`block w-full rounded-md border-0 py-2 px-2 size-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-base sm:leading-6 ${className}`}
+            className={`block w-full rounded-md border-0 px-6 size-14 text-gray-900 shadow-sm ring-2 ring-inset ${borderClassName} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-lg sm:leading-6`}
             value={value}
             onValueChange={handleOnValueChange}
             placeholder="Please enter a value"
-            prefix={prefix}
             step={1}
             allowNegativeValue={false}
             fixedDecimalLength={fixedDecimalLength}
@@ -91,15 +90,19 @@ const App = () => {
             disableAbbreviations={true}
             maxLength={11}
           />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span className="text-lg font-bold">
+              {prefix} 
+            </span> 
+          </div> 
         </div>
       </div>
 
       <div>
         <button
           type="button"
-          className="flex w-full justify-center size-12 rounded-md bg-indigo-600 px-3 py-1.5 text-base font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Describe
+          className="flex w-full justify-center size-12 rounded-md bg-blue-600 px-3 py-3 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >Describe
         </button>
       </div>
     </form>
