@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using QoniacTask.Api.Filters;
 
 namespace QoniacTask.Server
 {
@@ -9,29 +10,32 @@ namespace QoniacTask.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers()
-                .ConfigureApiBehaviorOptions(setupAction =>
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<CurrencyFormatErrorFilter>();
+            })
+            .ConfigureApiBehaviorOptions(setupAction =>
+            {
+                setupAction.InvalidModelStateResponseFactory = context =>
                 {
-                    setupAction.InvalidModelStateResponseFactory = context =>
+                    var problemDetailsFactory =
+                        context.HttpContext.RequestServices.GetRequiredService<ProblemDetailsFactory>();
+
+                    var validationProblemDetails =
+                        problemDetailsFactory.CreateValidationProblemDetails(
+                            context.HttpContext, context.ModelState);
+
+                    validationProblemDetails.Type =
+                        "https://datatracker.ietf.org/doc/html/rfc9110#name-422-unprocessable-content";
+                    validationProblemDetails.Status = StatusCodes.Status422UnprocessableEntity;
+
+                    return new UnprocessableEntityObjectResult(validationProblemDetails)
                     {
-                        var problemDetailsFactory =
-                            context.HttpContext.RequestServices.GetRequiredService<ProblemDetailsFactory>();
-
-                        var validationProblemDetails =
-                            problemDetailsFactory.CreateValidationProblemDetails(
-                                context.HttpContext, context.ModelState);
-
-                        validationProblemDetails.Type =
-                            "https://datatracker.ietf.org/doc/html/rfc9110#name-422-unprocessable-content";
-                        validationProblemDetails.Status = StatusCodes.Status422UnprocessableEntity;
-
-                        return new UnprocessableEntityObjectResult(validationProblemDetails)
-                        {
-                            ContentTypes = { "application/problem+json" }
-                        };
+                        ContentTypes = { "application/problem+json" }
                     };
-                });
-            
+                };
+            });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

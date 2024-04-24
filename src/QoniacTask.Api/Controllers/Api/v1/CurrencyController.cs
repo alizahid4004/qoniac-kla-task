@@ -25,6 +25,7 @@ namespace QoniacTask.Api.Controllers
         {
             //NOTE: I don't see the benefit of putting this behind an interface. It's testable as is
             //and putting it behind an interface would be pretty easy if the need arises.
+            //putting it behind an interface later also means i will have more info to design a better abstraction
             var description = NumberToWordsConverter.Convert(request.Amount, Options);
             var response = new CurrencyConversionResponse(description);
             return Ok(response);
@@ -34,9 +35,11 @@ namespace QoniacTask.Api.Controllers
         public IActionResult ParseAndConvertCurrency(
             [FromBody] CurrencyParseAndConvertRequest request)
         {
+            //NOTE: just like the other controller method, this can be easily placed behind an interface
             var currency = CurrencyParser.Parse(request.Amount);
             var description = NumberToWordsConverter.Convert(currency, Options);
             var response = new CurrencyConversionResponse(description);
+
             return Ok(response);
         }
     }
