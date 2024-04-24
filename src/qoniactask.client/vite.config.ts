@@ -53,7 +53,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "^/weatherforecast": {
+      "^/api/v1/currency/.*": {
         target,
         secure: false,
       },
