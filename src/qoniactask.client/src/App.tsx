@@ -13,8 +13,10 @@ const App = () => {
   const groupSeparator = " ";
   const fixedDecimalLength = 2;
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [borderClassName, setClassName] = useState("ring-gray-300");
+  const [message, setMessage] = useState<string>("");
+  const [messageClass, setMessageClass] = useState<string>("text-gray-900");
+  const [borderClassName, setBorderClassName] = useState<string>("ring-gray-300");
+  const [validInput, setValidInput] = useState<boolean>(true);
   const [value, setValue] = useState<string | number>(123.45);
   const [values, setValues] = useState<CurrencyInputOnChangeValues>();
 
@@ -23,30 +25,35 @@ const App = () => {
     name,
     _values,
   ) => {
-    console.log(_value);
-    console.log(_values);
-
     if (!_value) {
-      setClassName("ring-red-500");
+      setBorderClassName("ring-red-500");
+      setValidInput(false);
       setValue("");
       return;
     }
 
     if (Number(_value) > max) {
-      setErrorMessage(`Max: ${prefix}${max}`);
-      setClassName("ring-red-500");
+      setMessage(`Max: ${prefix}${max}`);
+      setMessageClass("text-red-500");
+      setBorderClassName("ring-red-500");
+      setValidInput(false);
       setValue(_value);
       return;
     }
 
     if (Number(_value) < min) {
-      setErrorMessage(`Min: ${prefix}${max}`);
-      setClassName("ring-red-500");
+      setMessage(`Min: ${prefix}${max}`);
+      setMessageClass("text-red-500");
+      setBorderClassName("ring-red-500");
+      setValidInput(false);
       setValue(_value);
       return;
     }
 
-    setClassName("ring-green-500");
+    setBorderClassName("ring-green-500");
+    setMessageClass("text-gray-900");
+    setMessage("")
+    setValidInput(true);
     setValue(_value);
     setValues(_values);
   };
@@ -84,11 +91,11 @@ const App = () => {
             placeholder="Please enter a value"
             step={1}
             allowNegativeValue={false}
-            fixedDecimalLength={fixedDecimalLength}
+            decimalsLimit={fixedDecimalLength}
             decimalSeparator={decimalSeparator}
             groupSeparator={groupSeparator}
             disableAbbreviations={true}
-            maxLength={11}
+            maxLength={12}
           />
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span className="text-lg font-bold">
@@ -101,11 +108,20 @@ const App = () => {
       <div>
         <button
           type="button"
-          className="flex w-full justify-center size-12 rounded-md bg-blue-600 px-3 py-3 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className={`${validInput ? '' : 'opacity-50'} flex w-full justify-center size-12 rounded-md bg-blue-600 px-3 py-3 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600`}
+          disabled={!validInput}
         >Describe
         </button>
       </div>
     </form>
+  </div>
+
+  <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    <p
+      className={`mt-10 text-center text-xl font-bold leading-9 tracking-tight ${messageClass}`}
+    >
+      {message}
+    </p>
   </div>
 </div>
   );
