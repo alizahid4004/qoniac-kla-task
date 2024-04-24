@@ -4,6 +4,7 @@ namespace QoniacTask.Api.Test
 {
     public class NumberToWordsConverterTests
     {
+        //NOTE: using TheoryData because InlineData doesn't work with decimals
         public static TheoryData<decimal, string> DefaultConversionData =>
         new()
         {
