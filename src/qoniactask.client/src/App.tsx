@@ -5,14 +5,8 @@ import CurrencyInput, {
 } from "react-currency-input-field";
 import "./App.css";
 
-type DescriptionData = {
-  amountDescription: string;
-};
-
 type JSONResponse = {
-  data?: {
-    amountDescription: Omit<DescriptionData>;
-  };
+  amountDescription?: string;
   errors?: Array<{ message: string }>;
 };
 
@@ -71,7 +65,7 @@ const App = () => {
     setValues(_values);
   };
 
-  const getDescription = async (): Promise<DescriptionData> => {
+  const getDescription = async (): Promise<string> => {
     const response = await fetch("/api/v1/currency/parse-and-convert", {
       method: "POST",
       headers: {
@@ -82,19 +76,40 @@ const App = () => {
       }),
     });
 
-    const { data, errors }: JSONResponse = await response.json();
+    const { amountDescription, errors }: JSONResponse = await response.json();
     if (response.ok) {
-      const description = data?.amountDescription;
+      console.log(amountDescription);
+      const description = amountDescription;
       if (description) {
         return description;
       } else {
         return Promise.reject(new Error(`Could not fetch description`));
       }
     } else {
+      console.log(errors);
       const error = new Error(
         errors?.map((e) => e.message).join("\n") ?? "unknown",
       );
       return Promise.reject(error);
+    }
+  };
+
+  const describeButtonClick = async (e) => {
+    e.preventDefault();
+    try {
+      if (!validInput) {
+        return;
+      }
+      const amountDescription = await getDescription();
+      setMessage(amountDescription);
+      setMessageClass("text-gray-900");
+    } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+
+      setMessage(message);
+      setMessageClass("text-gray-900");
     }
   };
 
@@ -144,6 +159,7 @@ const App = () => {
               type="button"
               className={`${validInput ? "" : "opacity-50"} flex size-12 w-full justify-center rounded-md bg-blue-600 px-3 py-3 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600`}
               disabled={!validInput}
+              onClick={describeButtonClick}
             >
               Describe
             </button>
