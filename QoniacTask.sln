@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QoniacTask.Api", "src\QoniacTask.Api\QoniacTask.Api.csproj", "{C68F6978-D36C-4D66-9495-18F4233E5BE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QoniacTask.Api.Tests", "test\QoniacTask.Api.Test\QoniacTask.Api.Tests.csproj", "{D54169D7-0096-4067-8158-3EC1354CB750}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QoniacTask.Api.Tests", "test\QoniacTask.Api.Test\QoniacTask.Api.Tests.csproj", "{D54169D7-0096-4067-8158-3EC1354CB750}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QoniacTask.Api.Tests.Integration", "test\QoniacTask.Api.Tests.Integration\QoniacTask.Api.Tests.Integration.csproj", "{8C92DF02-2D82-48FD-89BB-4C8A60B6CEAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D54169D7-0096-4067-8158-3EC1354CB750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D54169D7-0096-4067-8158-3EC1354CB750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D54169D7-0096-4067-8158-3EC1354CB750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C92DF02-2D82-48FD-89BB-4C8A60B6CEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C92DF02-2D82-48FD-89BB-4C8A60B6CEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C92DF02-2D82-48FD-89BB-4C8A60B6CEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C92DF02-2D82-48FD-89BB-4C8A60B6CEAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

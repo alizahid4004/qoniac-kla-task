@@ -14,6 +14,9 @@ namespace QoniacTask.Server
             {
                 options.Filters.Add<CurrencyFormatErrorFilter>();
             })
+            //NOTE: For validation related errors, http status 422 is now considered
+            //more appropriate. Asp by default doesn't return 422 on validation errors
+            //Following code is changing that.
             .ConfigureApiBehaviorOptions(setupAction =>
             {
                 setupAction.InvalidModelStateResponseFactory = context =>
