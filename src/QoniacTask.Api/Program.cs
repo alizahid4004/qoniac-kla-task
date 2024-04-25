@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using QoniacTask.Api.Filters;
+using System.Reflection;
 
 namespace QoniacTask.Server
 {
@@ -40,7 +41,11 @@ namespace QoniacTask.Server
             });
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });
 
             var app = builder.Build();
 
@@ -66,6 +71,9 @@ namespace QoniacTask.Server
 
             app.Run();
 
+            //NOTE: A habit of mine is to attach global exception handlers as well.
+            //If there is an uncaught task exception, it will get logged.
+            //specially useful if fire and forget tasks are used.
             static void AttachGlobalHanders(ILogger logger)
             {
                 AppDomain.CurrentDomain.UnhandledException += (sender, exArgs) =>

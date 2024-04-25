@@ -19,7 +19,14 @@ namespace QoniacTask.Api.Controllers
             IntegerDecimalSeparationText = "and"
         };
 
+        /// <summary>
+        /// Takes in a currency value as a decimal and describes it in text.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet("convert", Name = nameof(ConvertCurrency))]
+        [ProducesResponseType(typeof(CurrencyConversionResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
         public IActionResult ConvertCurrency(
             [FromQuery] CurrencyConversionRequest request)
         {
@@ -31,7 +38,15 @@ namespace QoniacTask.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Takes in a currency value as a pre-formatted sting with space for group separators and comma for
+        /// decimal separator and describes it in text.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet("parse-and-convert", Name = nameof(ParseAndConvertCurrency))]
+        [ProducesResponseType(typeof(CurrencyConversionResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
         public IActionResult ParseAndConvertCurrency(
             [FromQuery] CurrencyParseAndConvertRequest request)
         {

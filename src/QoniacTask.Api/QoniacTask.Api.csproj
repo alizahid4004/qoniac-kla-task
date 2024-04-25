@@ -9,6 +9,8 @@
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
     <SkipSpaPublish>false</SkipSpaPublish>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
     <Authors>Ali Zahid</Authors>
     <Description>Codding task for Qoniac (KLA)</Description>
   </PropertyGroup>
