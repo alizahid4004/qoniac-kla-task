@@ -19,9 +19,9 @@ namespace QoniacTask.Api.Controllers
             IntegerDecimalSeparationText = "and"
         };
 
-        [HttpPost("convert", Name = nameof(ConvertCurrency))]
+        [HttpGet("convert", Name = nameof(ConvertCurrency))]
         public IActionResult ConvertCurrency(
-            [FromBody] CurrencyConversionRequest request)
+            [FromQuery] CurrencyConversionRequest request)
         {
             //NOTE: I don't see the benefit of putting this behind an interface. It's testable as is
             //and putting it behind an interface would be pretty easy if the need arises.
@@ -31,9 +31,9 @@ namespace QoniacTask.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost("parse-and-convert", Name = nameof(ParseAndConvertCurrency))]
+        [HttpGet("parse-and-convert", Name = nameof(ParseAndConvertCurrency))]
         public IActionResult ParseAndConvertCurrency(
-            [FromBody] CurrencyParseAndConvertRequest request)
+            [FromQuery] CurrencyParseAndConvertRequest request)
         {
             //NOTE: just like the other controller method, this can be easily placed behind an interface
             var currency = CurrencyParser.Parse(request.Amount);

@@ -66,19 +66,10 @@ const App = () => {
   };
 
   const getDescription = async (): Promise<string> => {
-    const response = await fetch("/api/v1/currency/parse-and-convert", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json;charset=UTF-8",
-      },
-      body: JSON.stringify({
-        amount: values?.formatted,
-      }),
-    });
+    const response = await fetch(`/api/v1/currency/parse-and-convert?amount=${values?.formatted}`);
 
     const { amountDescription, errors }: JSONResponse = await response.json();
     if (response.ok) {
-      console.log(amountDescription);
       const description = amountDescription;
       if (description) {
         return description;
@@ -116,7 +107,7 @@ const App = () => {
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h1 className="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
+        <h1 className="mt-10 text-center text-3xl leading-9 tracking-tight text-gray-900">
           Currency Describer
         </h1>
       </div>
@@ -169,7 +160,7 @@ const App = () => {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <p
-          className={`mt-10 text-center text-xl font-bold leading-9 tracking-tight ${messageClass}`}
+          className={`mt-10 text-center text-xl leading-9 tracking-tight ${messageClass}`}
         >
           {message}
         </p>
