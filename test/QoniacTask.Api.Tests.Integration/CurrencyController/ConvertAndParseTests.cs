@@ -5,11 +5,11 @@ using System.Net.Http.Json;
 namespace QoniacTask.Api.Tests.Integration
 {
     //NOTE: for brevity I've only written a few integration test cases
-    public class ConvertTests : IClassFixture<CurrencyApiFactory>
+    public class ConvertAndParseTests : IClassFixture<CurrencyApiFactory>
     {
         private readonly HttpClient _client;
 
-        public ConvertTests(CurrencyApiFactory apiFactory)
+        public ConvertAndParseTests(CurrencyApiFactory apiFactory)
         {
             _client = apiFactory.CreateClient();
         }
@@ -17,7 +17,7 @@ namespace QoniacTask.Api.Tests.Integration
         [Fact]
         public async Task Convert_ShouldConvertAmount_WhenDataIsValid()
         {
-            var endpoint = new Uri("api/v1/currency/convert?Amount=999999999.99", UriKind.Relative);
+            var endpoint = new Uri("api/v1/currency/parse-and-convert?Amount=999 999 999,99", UriKind.Relative);
 
             var response = await _client.GetAsync(endpoint);
 
@@ -33,7 +33,7 @@ namespace QoniacTask.Api.Tests.Integration
         [Fact]
         public async Task Convert_ShouldReturn422_WhenDataIsMissing()
         {
-            var endpoint = new Uri("api/v1/currency/convert", UriKind.Relative);
+            var endpoint = new Uri("api/v1/currency/parse-and-convert", UriKind.Relative);
 
             var response = await _client.GetAsync(endpoint);
 
@@ -43,7 +43,7 @@ namespace QoniacTask.Api.Tests.Integration
         [Fact]
         public async Task Convert_ShouldReturn422_WhenDataIsInvalid()
         {
-            var endpoint = new Uri("api/v1/currency/convert?Amount=(⊙_⊙)", UriKind.Relative);
+            var endpoint = new Uri("api/v1/currency/parse-and-convert?Amount=(╯°□°)╯︵ ┻━┻", UriKind.Relative);
 
             var response = await _client.GetAsync(endpoint);
 
