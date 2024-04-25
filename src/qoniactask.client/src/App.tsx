@@ -7,7 +7,9 @@ import "./App.css";
 
 type JSONResponse = {
   amountDescription?: string;
-  errors?: Array<{ message: string }>;
+  errors?: {
+    Amount: Array<string>
+  };
 };
 
 const App = () => {
@@ -88,7 +90,7 @@ const App = () => {
     } else {
       console.log(errors);
       const error = new Error(
-        errors?.map((e) => e.message).join("\n") ?? "unknown",
+        errors?.Amount?.map((e) => e).join(", ") ?? "unknown",
       );
       return Promise.reject(error);
     }
