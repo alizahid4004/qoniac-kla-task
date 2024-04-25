@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CurrencyInput, {
   CurrencyInputProps,
-  CurrencyInputOnChangeValues,
+  formatValue as ValueFormatter,
 } from "react-currency-input-field";
 import "./App.css";
 
@@ -11,6 +11,7 @@ type JSONResponse = {
 };
 
 const App = () => {
+  const startingValue = "123.45";
   const max = 999999999.99;
   const maxFormatted = "999 999 999,99";
   const min = 0;
@@ -24,8 +25,14 @@ const App = () => {
   const [borderClassName, setBorderClassName] =
     useState<string>("ring-gray-300");
   const [validInput, setValidInput] = useState<boolean>(true);
-  const [value, setValue] = useState<string | number>(123.45);
-  const [values, setValues] = useState<CurrencyInputOnChangeValues>();
+  const [value, setValue] = useState<string | number>(startingValue);
+  const [formattedValue, setFormattedValue] = useState<string>(
+    ValueFormatter({
+      value: startingValue,
+      decimalSeparator: decimalSeparator,
+      groupSeparator: groupSeparator,
+    }),
+  );
 
   const handleOnValueChange: CurrencyInputProps["onValueChange"] = (
     _value,
@@ -62,11 +69,13 @@ const App = () => {
     setMessage("");
     setValidInput(true);
     setValue(_value);
-    setValues(_values);
+    setFormattedValue(_values?.formatted);
   };
 
   const getDescription = async (): Promise<string> => {
-    const response = await fetch(`/api/v1/currency/parse-and-convert?amount=${values?.formatted}`);
+    const response = await fetch(
+      `/api/v1/currency/parse-and-convert?amount=${formattedValue}`,
+    );
 
     const { amountDescription, errors }: JSONResponse = await response.json();
     if (response.ok) {
