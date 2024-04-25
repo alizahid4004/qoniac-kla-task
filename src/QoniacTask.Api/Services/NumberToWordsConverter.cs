@@ -92,7 +92,7 @@ namespace QoniacTask.Server.Services
                     ConvertInternal(-number, isDecimal, options) : $"{options.NegativeText} {ConvertInternal(-number, isDecimal, options)}";
             }
 
-            var parts = new List<string>(20);
+            var parts = new List<string>();
 
             AppendParts(parts, ref number, Billion.Value, Billion.Text, options);
             AppendParts(parts, ref number, Million.Value, Million.Text, options);
