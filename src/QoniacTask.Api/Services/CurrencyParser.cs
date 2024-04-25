@@ -59,6 +59,11 @@ namespace QoniacTask.Api.Services
             {
                 var changeString = parts[1];
 
+                if (changeString.Length > 2)
+                {
+                    throw new FormatException("Only precision up-to 2 decimal points is allowed");
+                }
+
                 if (changeString.Length == 1)
                 {
                     changeString += '0';
