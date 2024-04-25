@@ -15,11 +15,13 @@ namespace QoniacTask.Api.Services
                 throw new ArgumentException($"'{nameof(formattedAmount)}' cannot be null or whitespace.", nameof(formattedAmount));
             }
 
-            options ??= Default;
-
-            if (options.DecimalSeparator == options.GroupSeparator)
+            if (options is not null)
             {
-                throw new InvalidOperationException("Decimal separator and group separator's can't be the same");
+                ValidateOptions(options);
+            }
+            else
+            {
+                options = Default;
             }
 
             var parts = formattedAmount.Split(options.DecimalSeparator);
@@ -40,6 +42,16 @@ namespace QoniacTask.Api.Services
 
             var wholeString = parts[0].Replace(options.GroupSeparator.ToString(), string.Empty);
             var whole = long.Parse(wholeString);
+
+            if (options.WholeMinimum.HasValue && whole < options.WholeMinimum)
+            {
+                throw new FormatException($"Provided number is below the allowed range of {options.WholeMinimum}");
+            }
+
+            if (options.WholeMaximum.HasValue && whole > options.WholeMaximum)
+            {
+                throw new FormatException($"Provided number is above the allowed range of {options.WholeMaximum}");
+            }
 
             var hasChange = parts.Length == 2;
 
@@ -68,6 +80,21 @@ namespace QoniacTask.Api.Services
         private static bool InputContainsNumbers(string input, char separator)
         {
             return input.Split(separator).All(x => int.TryParse(x, out _));
+        }
+
+        private static void ValidateOptions(CurrencyParserOptions options)
+        {
+            if (options.DecimalSeparator == options.GroupSeparator)
+            {
+                throw new InvalidOperationException("Decimal separator and group separator's can't be the same");
+            }
+
+            if (options.WholeMinimum.HasValue &&
+                options.WholeMaximum.HasValue &&
+                options.WholeMinimum >= options.WholeMaximum)
+            {
+                throw new InvalidOperationException("Minimum whole value can't be greater than or equal to the maximum whole");
+            }
         }
     }
 }
