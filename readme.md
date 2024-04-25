@@ -15,6 +15,6 @@
 
 - Run using Visual Studio
     - Choose `QoniacTask.Api` as the start up project
-    - Choose `QoniacTask API` as the profile
+    - Choose `QoniacTask` as the profile
     - Start :)
     ![Visual Studio](./docs/visual-studio.png)
